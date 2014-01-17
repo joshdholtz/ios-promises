@@ -33,10 +33,10 @@
     Deferred *deferred = [Deferred deferred];
     XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
     
-    [deferred resolve:nil];
+    [deferred resolveWith:nil];
     XCTAssertEqual(deferred.state, PromiseStateResolved, @"Deferred state is not equal to PromiseStateResolved");
     
-    [deferred reject:nil];
+    [deferred rejectWith:nil];
     XCTAssertEqual(deferred.state, PromiseStateResolved, @"Deferred state is not equal to PromiseStateResolved");
 }
 
@@ -45,10 +45,10 @@
     Deferred *deferred = [Deferred deferred];
     XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
     
-    [deferred reject:nil];
+    [deferred rejectWith:nil];
     XCTAssertEqual(deferred.state, PromiseStateRejected, @"Deferred state is not equal to PromiseStateRejected");
     
-    [deferred resolve:nil];
+    [deferred resolveWith:nil];
     XCTAssertEqual(deferred.state, PromiseStateRejected, @"Deferred state is not equal to PromiseStateRejected");
 }
 
@@ -84,7 +84,7 @@
         NSLog(@"Always was called again again");
     }];
     
-    [deferred resolve:valueToResolveWith];
+    [deferred resolveWith:valueToResolveWith];
 }
 
 - (void)testResolvingDeferredBlockAfter
@@ -94,7 +94,7 @@
     
     NSString *valueToResolveWith = @"Yay";
     
-    [deferred resolve:valueToResolveWith];
+    [deferred resolveWith:valueToResolveWith];
     
     [deferred addDone:^(id value) {
         NSLog(@"Done was called");
@@ -154,7 +154,7 @@
         NSLog(@"Always was called again again");
     }];
     
-    [deferred reject:errorToRejectWith];
+    [deferred rejectWith:errorToRejectWith];
 }
 
 - (void)testRejectingDeferredBlockAfter
@@ -164,7 +164,7 @@
     
     NSError *errorToRejectWith = [NSError errorWithDomain:@"Ooops!" code:0 userInfo:nil];
     
-    [deferred reject:errorToRejectWith];
+    [deferred rejectWith:errorToRejectWith];
     
     [deferred addDone:^(id value) {
         NSLog(@"Done was called");
@@ -208,7 +208,7 @@
         NSLog(@"Always was called");
     }];
     
-    [deferred resolve:valueToResolveWith];
+    [deferred resolveWith:valueToResolveWith];
 }
 
 - (void)testResolvingDeferredThenBlockAfter
@@ -218,7 +218,7 @@
     
     NSString *valueToResolveWith = @"Yay";
     
-    [deferred resolve:valueToResolveWith];
+    [deferred resolveWith:valueToResolveWith];
     
     [deferred then:^(id value) {
         NSLog(@"Done was called");

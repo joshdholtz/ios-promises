@@ -148,10 +148,18 @@
     return self;
 }
 
+- (Deferred *)reject {
+    return [self rejectWith:nil];
+}
+
+- (Deferred *)resolve {
+    return [self resolveWith:nil];
+}
+
 /*
  * Rejects deferred if in pending sate and executes all fail and always blocks
  */
-- (Deferred *)reject:(NSError*)error {
+- (Deferred *)rejectWith:(NSError*)error {
     if (self.state != PromiseStatePending) return self;
     
     self.error = error;
@@ -166,7 +174,7 @@
 /*
  * Resolves deferred if in pending sate and executes all done and always blocks
  */
-- (Deferred *)resolve:(id)value {
+- (Deferred *)resolveWith:(id)value {
     if (self.state != PromiseStatePending) return self;
     
     self.value = value;

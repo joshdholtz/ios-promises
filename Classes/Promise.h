@@ -32,8 +32,10 @@ typedef void (^whenBlock)();
 @interface Deferred : Promise
 
 + (Deferred*)deferred;
-- (Deferred*)resolve:(id)value;
-- (Deferred*)reject:(NSError*)error;
+- (Deferred*)resolve;
+- (Deferred*)reject;
+- (Deferred*)resolveWith:(id)value;
+- (Deferred*)rejectWith:(NSError*)error;
 - (Promise*)promise;
 
 @end

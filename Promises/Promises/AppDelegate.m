@@ -19,7 +19,7 @@
     [deferred1 addDone:^(id value) {
         NSLog(@"WOOT - deferred1 is done - %@", value);
     }];
-    [deferred1 resolve:@"Josh is awesome"];
+    [deferred1 resolveWith:@"Josh is awesome"];
     
     // Example 2: rejecting a deferred's promise (promise is the same as deferred but doesn't
     // show method for resolving or rejecting
@@ -32,7 +32,7 @@
     [promise addFail:^(NSError *error) {
         NSLog(@":( - deferred2 failed - %@", error.domain);
     }];
-    [deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+    [deferred2 rejectWith:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
     
     // Example 3: multiple dones, fails, and always
     Deferred *deferred3 = [Deferred deferred];
@@ -58,7 +58,7 @@
         NSLog(@":) 2- deferred3 always!");
     }];
     
-    [deferred3 resolve:@"Sweet stuff"];
+    [deferred3 resolveWith:@"Sweet stuff"];
     
     // When examples
     [self testWhenRejecting];
@@ -84,8 +84,8 @@
         NSLog(@"WHEN REJECTING always called");
     }];
     
-    [deferred1 resolve:@"Yay"];
-    [deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+    [deferred1 resolveWith:@"Yay"];
+    [deferred2 rejectWith:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
 }
 
 /*
@@ -103,8 +103,8 @@
         NSLog(@"WHEN RESOLVING always called");
     }];
     
-    [deferred1 resolve:@"Yay"];
-    [deferred2 resolve:@"Woot"];
+    [deferred1 resolveWith:@"Yay"];
+    [deferred2 resolveWith:@"Woot"];
 }
 
 /*
@@ -122,7 +122,7 @@
         NSLog(@"WHEN NOT FINISHING always called");
     }];
     
-    [deferred1 resolve:@"Yay"];
+    [deferred1 resolveWith:@"Yay"];
 }
 
 /*
@@ -140,10 +140,10 @@
         NSLog(@"WHEN NOT FINISHING always called");
     }];
     
-    [deferred1 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+    [deferred1 rejectWith:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
     
     sleep(5);
-    [deferred2 resolve:@"Yay"];
+    [deferred2 resolveWith:@"Yay"];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
