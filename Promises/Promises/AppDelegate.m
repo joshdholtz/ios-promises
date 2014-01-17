@@ -64,6 +64,7 @@
     [self testWhenRejecting];
     [self testWhenResolving];
     [self testWhenNotFinishing];
+    [self testWhenSlowAlways];
     
     return YES;
 }
@@ -97,7 +98,7 @@
     [When when:@[deferred1, deferred2] then:^{
         NSLog(@"WHEN RESOLVING done called");
     } fail:^(NSError *error) {
-        NSLog(@"WHEN RESOLVING fail called");
+        NSLog(@"WHEN RESOLVING fail called - %@", error.domain);
     } always:^{
         NSLog(@"WHEN RESOLVING always called");
     }];
@@ -116,12 +117,33 @@
     [When when:@[deferred1, deferred2] then:^{
         NSLog(@"WHEN NOT FINISHING done called");
     } fail:^(NSError *error) {
-        NSLog(@"WHEN NOT FINISHING fail called");
+        NSLog(@"WHEN NOT FINISHING fail called - %@", error.domain);
     } always:^{
         NSLog(@"WHEN NOT FINISHING always called");
     }];
     
     [deferred1 resolve:@"Yay"];
+}
+
+/*
+ * Nothing will get called because all promises were never finished
+ */
+- (void)testWhenSlowAlways {
+    Deferred *deferred1 = [Deferred deferred];
+    Deferred *deferred2 = [Deferred deferred];
+    
+    [When when:@[deferred1, deferred2] then:^{
+        NSLog(@"WHEN NOT FINISHING done called");
+    } fail:^(NSError *error) {
+        NSLog(@"WHEN NOT FINISHING fail called - %@", error.domain);
+    } always:^{
+        NSLog(@"WHEN NOT FINISHING always called");
+    }];
+    
+    [deferred1 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+    
+    sleep(5);
+    [deferred2 resolve:@"Yay"];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

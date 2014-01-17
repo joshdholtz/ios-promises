@@ -208,6 +208,7 @@
 @property (nonatomic, strong) NSArray *promises;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, assign) BOOL won;
+@property (nonatomic, assign) BOOL always;
 
 @property (readwrite, copy) whenBlock when;
 
@@ -230,34 +231,34 @@
     if (self) {
         self.failed = NO;
         self.won = NO;
+        self.always = NO;
     }
     return self;
 }
 
 - (void)setPromises:(NSArray *)promises {
     _promises = promises;
-    
-    // Check fail and win before
-    if ([self fail]) return;
-    if ([self win]) return;
+
     
     // If haven't failed or won yet, add check to each promise
     for (Promise *promise in promises) {
         [promise addFail:^(NSError *error) {
-            [self fail];
+            [self doFail];
         }];
         [promise addAlways:^{
-            [self win];
+            [self doWin];
+            [self doAlways];
         }];
     }
     
-    // And again incase weird timing issues of things maybe?
-    if ([self fail]) return;
-    if ([self win]) return;
+    // Checking incase things finished before we added thise promises
+    [self doFail];
+    [self doWin];
+    [self doAlways];
     
 }
 
-- (BOOL)fail {
+- (BOOL)doFail {
     @synchronized(self) {
         if (self.failed == YES || self.won == YES) return NO;
         
@@ -267,7 +268,6 @@
                 self.failed = YES;
                 self.error = promise.error;
                 [self executeFailBlocks];
-                [self executeAlwaysBlocks];
                 
                 return YES;
             }
@@ -277,7 +277,7 @@
     }
 }
 
-- (BOOL)win {
+- (BOOL)doWin {
     @synchronized(self) {
         if (self.failed == YES || self.won == YES) return NO;
         
@@ -289,6 +289,22 @@
         
         self.won = YES;
         [self executeDoneBlocks];
+        
+        return YES;
+    }
+}
+
+- (BOOL)doAlways {
+    @synchronized(self) {
+        if (self.always) return NO;
+        
+        for (Promise *promise in _promises) {
+            if (promise.state == PromiseStatePending) {
+                return NO;
+            }
+        }
+        
+        self.always = YES;
         [self executeAlwaysBlocks];
         
         return YES;
