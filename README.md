@@ -1,8 +1,10 @@
-# Promises
+# iOS-Promises
+
+Asynchronous code... blah blah blah... standard interface for... blah blah blah... handling asynchronous actions... blah blah blah... chaining callbacks.
 
 ### Features
-- Create `Deferred` object to change state for promise behavior
-- `Promise` objects are read-only `Deferred` objects
+- `Deferred` objects (the controller for the promise) are used change state for promise behavior which triggers callbacks
+- `Promise` objects are really just read-only `Deferred` objects
 - Add done, fail, and always blocks to a `Deferred` or `Promise` object
     - Add 0 to many done, fail, and always blocks
     - Can use "then" method for shortcut to add one done, one fail, and one always block
