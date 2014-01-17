@@ -8,7 +8,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import "Deferred.h"
 #import "Promise.h"
 
 @interface PromisesTests : XCTestCase
@@ -72,6 +71,69 @@
     }];
     
     [deferred resolve:valueToResolveWith];
+}
+
+- (void)testResolvingDeferredBlockAfter
+{
+    Deferred *deferred = [Deferred deferred];
+    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
+    
+    NSString *valueToResolveWith = @"Yay";
+    
+    [deferred resolve:valueToResolveWith];
+    
+    [deferred addDone:^(id value) {
+        NSLog(@"Done was called");
+        XCTAssert([value isEqualToString:valueToResolveWith], @"Value should equal %@", valueToResolveWith);
+    }];
+    [deferred addFail:^(NSError *error) {
+        NSLog(@"Fail was called");
+    }];
+    [deferred addAlways:^{
+        NSLog(@"Always was called");
+    }];
+}
+
+- (void)testRejectingDeferredBlockBefore
+{
+    Deferred *deferred = [Deferred deferred];
+    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
+    
+    NSError *errorToRejectWith = [NSError errorWithDomain:@"Ooops!" code:0 userInfo:nil];
+    
+    [deferred addDone:^(id value) {
+        NSLog(@"Done was called");
+    }];
+    [deferred addFail:^(NSError *error) {
+        NSLog(@"Fail was called");
+        XCTAssert([error.domain isEqualToString:errorToRejectWith.domain], @"Error domain should equal %@", errorToRejectWith.domain);
+    }];
+    [deferred addAlways:^{
+        NSLog(@"Always was called");
+    }];
+    
+    [deferred reject:errorToRejectWith];
+}
+
+- (void)testRejectingDeferredBlockAfter
+{
+    Deferred *deferred = [Deferred deferred];
+    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
+    
+    NSError *errorToRejectWith = [NSError errorWithDomain:@"Ooops!" code:0 userInfo:nil];
+    
+    [deferred reject:errorToRejectWith];
+    
+    [deferred addDone:^(id value) {
+        NSLog(@"Done was called");
+    }];
+    [deferred addFail:^(NSError *error) {
+        NSLog(@"Fail was called");
+        XCTAssert([error.domain isEqualToString:errorToRejectWith.domain], @"Error domain should equal %@", errorToRejectWith.domain);
+    }];
+    [deferred addAlways:^{
+        NSLog(@"Always was called");
+    }];
 }
 
 @end

@@ -60,3 +60,111 @@
 }
 
 @end
+
+@interface Deferred()
+
+@property (nonatomic, strong) Promise *promise;
+
+@end
+
+@implementation Deferred
+
++ (Deferred *)deferred {
+    return [[Deferred alloc] init];
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        _promise = [[Promise alloc] init];
+    }
+    return self;
+}
+
+- (Deferred *)reject:(NSError*)error {
+    if (self.state != PromiseStatePending) return self;
+    
+    self.error = error;
+    [self setState:PromiseStateRejected];
+    
+    [self executeFailBlocks];
+    [self executeAlwaysBlocks];
+    
+    return self;
+}
+
+- (Deferred *)resolve:(id)value {
+    if (self.state != PromiseStatePending) return self;
+    
+    self.value = value;
+    [self setState:PromiseStateResolved];
+    
+    [self executeDoneBlocks];
+    [self executeAlwaysBlocks];
+    
+    return self;
+}
+
+- (Promise *)promise {
+    return _promise;
+}
+
+#pragma mark - Block execution
+
+- (void)executeDoneBlocks {
+    for (doneBlock block in _promise.doneBlocks) {
+        block(self.value);
+    }
+}
+
+- (void)executeFailBlocks {
+    for (failBlock block in _promise.failBlocks) {
+        block(self.error);
+    }
+}
+
+- (void)executeAlwaysBlocks {
+    for (alwaysBlock block in _promise.alwaysBlocks) {
+        block();
+    }
+}
+
+#pragma mark - Override Promise
+
+- (PromiseState)state {
+    return _promise.state;
+}
+
+- (void)setState:(PromiseState)state {
+    [_promise setState:state];
+}
+
+- (id)value {
+    return _promise.value;
+}
+
+- (void)setValue:(id)value {
+    [_promise setValue:value];
+}
+
+- (NSError *)error {
+    return _promise.error;
+}
+
+- (void)setError:(NSError *)error {
+    [_promise setError:error];
+}
+
+- (Promise *)addDone:(doneBlock)doneBlock {
+    return [_promise addDone:doneBlock];
+}
+
+- (Promise *)addFail:(failBlock)failBlock {
+    return [_promise addFail:failBlock];
+}
+
+- (Promise *)addAlways:(alwaysBlock)alwaysBlock {
+    return [_promise addAlways:alwaysBlock];
+}
+
+@end

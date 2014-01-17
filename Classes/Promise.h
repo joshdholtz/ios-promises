@@ -24,3 +24,12 @@ typedef void (^alwaysBlock)();
 - (Promise*)addAlways:(alwaysBlock)alwaysBlock;
 
 @end
+
+@interface Deferred : Promise
+
++ (Deferred*)deferred;
+- (Deferred*)resolve:(id)value;
+- (Deferred*)reject:(NSError*)error;
+- (Promise*)promise;
+
+@end
