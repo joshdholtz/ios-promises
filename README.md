@@ -1,24 +1,23 @@
 # Promises
 
-[![Version](http://cocoapod-badges.herokuapp.com/v/Promises/badge.png)](http://cocoadocs.org/docsets/Promises)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/Promises/badge.png)](http://cocoadocs.org/docsets/Promises)
-
-## Usage
-
-To run the example project; clone the repo, and run `pod install` from the Project directory first.
-
-## Requirements
+### Features
 
 ## Installation
 
+### Drop-in Classes
+Clone the repository and drop in the .h and .m files from the "Classes" directory into your project.
+
+### CocoaPods
 Promises is available through [CocoaPods](http://cocoapods.org), to install
 it simply add the following line to your Podfile:
 
-    pod "Promises"
+    pod 'Promises', :git => 'git@github.com:joshdholtz/ios-promises.git'
+
+## Usage
 
 ## Author
 
-Josh Holtz, josh@rokkincat.com
+Josh Holtz, me@joshholtz.com, [@joshdholtz](https://twitter.com/joshdholtz)
 
 ## License
 
