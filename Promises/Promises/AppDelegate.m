@@ -25,10 +25,11 @@
     // show method for resolving or rejecting
     // This is used when you want to return just a promise from a method
     Deferred *deferred2 = [Deferred deferred];
-    [deferred2.promise addDone:^(id value) {
+    Promise *promise = deferred2.promise;
+    [promise addDone:^(id value) {
         NSLog(@"WOOT - deferred2 is done - %@", value);
     }];
-    [deferred2.promise addFail:^(NSError *error) {
+    [promise addFail:^(NSError *error) {
         NSLog(@":( - deferred2 failed - %@", error.domain);
     }];
     [deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
@@ -74,10 +75,10 @@
     Deferred *deferred1 = [Deferred deferred];
     Deferred *deferred2 = [Deferred deferred];
     
-    [When when:@[deferred1, deferred2] then:^(id value) {
+    [When when:@[deferred1, deferred2] then:^{
         NSLog(@"WHEN REJECTING done called");
     } fail:^(NSError *error) {
-        NSLog(@"WHEN REJECTING fail called");
+        NSLog(@"WHEN REJECTING fail called - %@", error.domain);
     } always:^{
         NSLog(@"WHEN REJECTING always called");
     }];
@@ -93,7 +94,7 @@
     Deferred *deferred1 = [Deferred deferred];
     Deferred *deferred2 = [Deferred deferred];
     
-    [When when:@[deferred1, deferred2] then:^(id value) {
+    [When when:@[deferred1, deferred2] then:^{
         NSLog(@"WHEN RESOLVING done called");
     } fail:^(NSError *error) {
         NSLog(@"WHEN RESOLVING fail called");
@@ -112,7 +113,7 @@
     Deferred *deferred1 = [Deferred deferred];
     Deferred *deferred2 = [Deferred deferred];
     
-    [When when:@[deferred1, deferred2] then:^(id value) {
+    [When when:@[deferred1, deferred2] then:^{
         NSLog(@"WHEN NOT FINISHING done called");
     } fail:^(NSError *error) {
         NSLog(@"WHEN NOT FINISHING fail called");

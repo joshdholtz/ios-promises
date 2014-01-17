@@ -209,13 +209,18 @@
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, assign) BOOL won;
 
+@property (readwrite, copy) whenBlock when;
+
 @end
 
 @implementation When
 
-+ (When *)when:(NSArray *)promises then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
++ (When *)when:(NSArray *)promises then:(whenBlock)whenBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
     When *when = [[When alloc] init];
-    [when then:doneBlock fail:failBlock always:alwaysBlock];
+    when.when = whenBlock;
+    [when then:^(id value) {
+        when.when();
+    } fail:failBlock always:alwaysBlock];
     [when setPromises:promises];
     return when;
 }
@@ -260,6 +265,7 @@
             if (promise.state == PromiseStateRejected) {
                 
                 self.failed = YES;
+                self.error = promise.error;
                 [self executeFailBlocks];
                 [self executeAlwaysBlocks];
                 

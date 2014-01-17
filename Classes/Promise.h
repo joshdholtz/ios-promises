@@ -13,6 +13,7 @@ typedef enum {
 typedef void (^doneBlock)(id value);
 typedef void (^failBlock)(NSError *error);
 typedef void (^alwaysBlock)();
+typedef void (^whenBlock)();
 
 #import <Foundation/Foundation.h>
 
@@ -37,6 +38,6 @@ typedef void (^alwaysBlock)();
 
 @interface When : Promise
 
-+ (When*)when:(NSArray*)promises then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock;
++ (When*)when:(NSArray*)promises then:(whenBlock)whenBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock;
 
 @end
