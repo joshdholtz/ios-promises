@@ -17,6 +17,7 @@ typedef void (^whenBlock)();
 
 #import <Foundation/Foundation.h>
 
+// Promise
 @interface Promise : NSObject
 
 - (PromiseState)state;
@@ -27,6 +28,7 @@ typedef void (^whenBlock)();
 
 @end
 
+// Deferred
 @interface Deferred : Promise
 
 + (Deferred*)deferred;
@@ -36,6 +38,7 @@ typedef void (^whenBlock)();
 
 @end
 
+// When
 @interface When : Promise
 
 + (When*)when:(NSArray*)promises then:(whenBlock)whenBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock;
