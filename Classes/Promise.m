@@ -75,6 +75,24 @@
     return self;
 }
 
+- (void)executeDoneBlocks {
+    for (doneBlock block in self.doneBlocks) {
+        block(self.value);
+    }
+}
+
+- (void)executeFailBlocks {
+    for (failBlock block in self.failBlocks) {
+        block(self.error);
+    }
+}
+
+- (void)executeAlwaysBlocks {
+    for (alwaysBlock block in self.alwaysBlocks) {
+        block();
+    }
+}
+
 @end
 
 @interface Deferred()
@@ -125,26 +143,6 @@
     return _promise;
 }
 
-#pragma mark - Block execution
-
-- (void)executeDoneBlocks {
-    for (doneBlock block in _promise.doneBlocks) {
-        block(self.value);
-    }
-}
-
-- (void)executeFailBlocks {
-    for (failBlock block in _promise.failBlocks) {
-        block(self.error);
-    }
-}
-
-- (void)executeAlwaysBlocks {
-    for (alwaysBlock block in _promise.alwaysBlocks) {
-        block();
-    }
-}
-
 #pragma mark - Override Promise
 
 - (PromiseState)state {
@@ -189,6 +187,106 @@
 - (Promise *)then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
     [_promise then:doneBlock fail:failBlock always:alwaysBlock];
     return self;
+}
+
+- (void)executeDoneBlocks {
+    [_promise executeDoneBlocks];
+}
+
+- (void)executeFailBlocks {
+    [_promise executeFailBlocks];
+}
+
+- (void)executeAlwaysBlocks {
+    [_promise executeAlwaysBlocks];
+}
+
+@end
+
+@interface When()
+
+@property (nonatomic, strong) NSArray *promises;
+@property (nonatomic, assign) BOOL failed;
+@property (nonatomic, assign) BOOL won;
+
+@end
+
+@implementation When
+
++ (When *)when:(NSArray *)promises then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
+    When *when = [[When alloc] init];
+    [when then:doneBlock fail:failBlock always:alwaysBlock];
+    [when setPromises:promises];
+    return when;
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        self.failed = NO;
+        self.won = NO;
+    }
+    return self;
+}
+
+- (void)setPromises:(NSArray *)promises {
+    _promises = promises;
+    
+    // Check fail and win before
+    if ([self fail]) return;
+    if ([self win]) return;
+    
+    // If haven't failed or won yet, add check to each promise
+    for (Promise *promise in promises) {
+        [promise addFail:^(NSError *error) {
+            [self fail];
+        }];
+        [promise addAlways:^{
+            [self win];
+        }];
+    }
+    
+    // And again incase weird timing issues of things maybe?
+    if ([self fail]) return;
+    if ([self win]) return;
+    
+}
+
+- (BOOL)fail {
+    @synchronized(self) {
+        if (self.failed == YES || self.won == YES) return NO;
+        
+        for (Promise *promise in _promises) {
+            if (promise.state == PromiseStateRejected) {
+                
+                self.failed = YES;
+                [self executeFailBlocks];
+                [self executeAlwaysBlocks];
+                
+                return YES;
+            }
+        }
+        
+        return NO;
+    }
+}
+
+- (BOOL)win {
+    @synchronized(self) {
+        if (self.failed == YES || self.won == YES) return NO;
+        
+        for (Promise *promise in _promises) {
+            if (promise.state != PromiseStateResolved) {
+                return NO;
+            }
+        }
+        
+        self.won = YES;
+        [self executeDoneBlocks];
+        [self executeAlwaysBlocks];
+        
+        return YES;
+    }
 }
 
 @end

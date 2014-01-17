@@ -8,12 +8,65 @@
 
 #import "AppDelegate.h"
 
+#import "Promise.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    
+    [self testWhenRejecting];
+    [self testWhenResolving];
+    [self testWhenNotFinishing];
+    
     return YES;
+}
+
+- (void)testWhenRejecting {
+    Deferred *deferred1 = [Deferred deferred];
+    Deferred *deferred2 = [Deferred deferred];
+    
+    [When when:@[deferred1, deferred2] then:^(id value) {
+        NSLog(@"WHEN REJECTING done called");
+    } fail:^(NSError *error) {
+        NSLog(@"WHEN REJECTING fail called");
+    } always:^{
+        NSLog(@"WHEN REJECTING always called");
+    }];
+    
+    [deferred1 resolve:@"Yay"];
+    [deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+}
+
+- (void)testWhenResolving {
+    Deferred *deferred1 = [Deferred deferred];
+    Deferred *deferred2 = [Deferred deferred];
+    
+    [When when:@[deferred1, deferred2] then:^(id value) {
+        NSLog(@"WHEN RESOLVING done called");
+    } fail:^(NSError *error) {
+        NSLog(@"WHEN RESOLVING fail called");
+    } always:^{
+        NSLog(@"WHEN RESOLVING always called");
+    }];
+    
+    [deferred1 resolve:@"Yay"];
+    [deferred2 resolve:@"Woot"];
+}
+
+- (void)testWhenNotFinishing {
+    Deferred *deferred1 = [Deferred deferred];
+    Deferred *deferred2 = [Deferred deferred];
+    
+    [When when:@[deferred1, deferred2] then:^(id value) {
+        NSLog(@"WHEN NOT FINISHING done called");
+    } fail:^(NSError *error) {
+        NSLog(@"WHEN NOT FINISHING fail called");
+    } always:^{
+        NSLog(@"WHEN NOT FINISHING always called");
+    }];
+    
+    [deferred1 resolve:@"Yay"];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

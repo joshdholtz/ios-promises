@@ -34,3 +34,9 @@ typedef void (^alwaysBlock)();
 - (Promise*)promise;
 
 @end
+
+@interface When : Promise
+
++ (When*)when:(NSArray*)promises then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock;
+
+@end
