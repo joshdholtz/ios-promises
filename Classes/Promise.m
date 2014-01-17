@@ -59,6 +59,19 @@
     return self;
 }
 
+- (Promise *)then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
+    if (self.state == PromiseStatePending) {
+        [_doneBlocks addObject:[doneBlock copy]];
+        [_failBlocks addObject:[failBlock copy]];
+        [_alwaysBlocks addObject:[alwaysBlock copy]];
+    } else {
+        doneBlock(self.value);
+        failBlock(self.error);
+        alwaysBlock();
+    }
+    return self;
+}
+
 @end
 
 @interface Deferred()
@@ -156,15 +169,23 @@
 }
 
 - (Promise *)addDone:(doneBlock)doneBlock {
-    return [_promise addDone:doneBlock];
+    [_promise addDone:doneBlock];
+    return self;
 }
 
 - (Promise *)addFail:(failBlock)failBlock {
-    return [_promise addFail:failBlock];
+    [_promise addFail:failBlock];
+    return self;
 }
 
 - (Promise *)addAlways:(alwaysBlock)alwaysBlock {
-    return [_promise addAlways:alwaysBlock];
+    [_promise addAlways:alwaysBlock];
+    return self;
+}
+
+- (Promise *)then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
+    [_promise then:doneBlock fail:failBlock always:alwaysBlock];
+    return self;
 }
 
 @end

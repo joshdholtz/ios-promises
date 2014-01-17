@@ -22,6 +22,7 @@ typedef void (^alwaysBlock)();
 - (Promise*)addDone:(doneBlock)doneBlock;
 - (Promise*)addFail:(failBlock)failBlock;
 - (Promise*)addAlways:(alwaysBlock)alwaysBlock;
+- (Promise*)then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock;
 
 @end
 
