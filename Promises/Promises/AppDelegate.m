@@ -14,7 +14,52 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Example 1: resolving a deferred
+    Deferred *deferred1 = [Deferred deferred];
+    [deferred1 addDone:^(id value) {
+        NSLog(@"WOOT - deferred1 is done - %@", value);
+    }];
+    [deferred1 resolve:@"Josh is awesome"];
     
+    // Example 2: rejecting a deferred's promise (promise is the same as deferred but doesn't
+    // show method for resolving or rejecting
+    // This is used when you want to return just a promise from a method
+    Deferred *deferred2 = [Deferred deferred];
+    [deferred2.promise addDone:^(id value) {
+        NSLog(@"WOOT - deferred2 is done - %@", value);
+    }];
+    [deferred2.promise addFail:^(NSError *error) {
+        NSLog(@":( - deferred2 failed - %@", error.domain);
+    }];
+    [deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+    
+    // Example 3: multiple dones, fails, and always
+    Deferred *deferred3 = [Deferred deferred];
+    [deferred3 addDone:^(id value) {
+        NSLog(@"DONE 1 - deferred3 is done - %@", value);
+    }];
+    [deferred3 addDone:^(id value) {
+        NSLog(@"DONE 2 - deferred3 is done - %@", value);
+    }];
+    [deferred3 addDone:^(id value) {
+        NSLog(@"DONE 3 - deferred3 is done - %@", value);
+    }];
+    [deferred3 addFail:^(NSError *error) {
+        NSLog(@":( - deferred3 failed - %@", error.domain);
+    }];
+    [deferred3 addFail:^(NSError *error) {
+        NSLog(@":( - deferred3 failed - %@", error.domain);
+    }];
+    [deferred3 addAlways:^{
+        NSLog(@":) 1 - deferred3 always!");
+    }];
+    [deferred3 addAlways:^{
+        NSLog(@":) 2- deferred3 always!");
+    }];
+    
+    [deferred3 resolve:@"Sweet stuff"];
+    
+    // When examples
     [self testWhenRejecting];
     [self testWhenResolving];
     [self testWhenNotFinishing];
@@ -22,6 +67,9 @@
     return YES;
 }
 
+/*
+ * The fail and always will get called
+ */
 - (void)testWhenRejecting {
     Deferred *deferred1 = [Deferred deferred];
     Deferred *deferred2 = [Deferred deferred];
@@ -38,6 +86,9 @@
     [deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
 }
 
+/*
+ * The then/done and always will get called
+ */
 - (void)testWhenResolving {
     Deferred *deferred1 = [Deferred deferred];
     Deferred *deferred2 = [Deferred deferred];
@@ -54,6 +105,9 @@
     [deferred2 resolve:@"Woot"];
 }
 
+/*
+ * Nothing will get called because all promises were never finished
+ */
 - (void)testWhenNotFinishing {
     Deferred *deferred1 = [Deferred deferred];
     Deferred *deferred2 = [Deferred deferred];
