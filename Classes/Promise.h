@@ -11,7 +11,7 @@ typedef enum {
 } PromiseState;
 
 typedef void (^doneBlock)(id value);
-typedef void (^failBlock)(NSError *error);
+typedef void (^failBlock)(id error);
 typedef void (^alwaysBlock)();
 typedef void (^whenBlock)();
 
@@ -35,7 +35,7 @@ typedef void (^whenBlock)();
 - (Deferred*)resolve;
 - (Deferred*)reject;
 - (Deferred*)resolveWith:(id)value;
-- (Deferred*)rejectWith:(NSError*)error;
+- (Deferred*)rejectWith:(id)error;
 - (Promise*)promise;
 
 @end

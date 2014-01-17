@@ -71,7 +71,7 @@
         NSLog(@"Done was called again again");
         XCTAssert([value isEqualToString:valueToResolveWith], @"Value should equal %@", valueToResolveWith);
     }];
-    [deferred addFail:^(NSError *error) {
+    [deferred addFail:^(id error) {
         NSLog(@"Fail was called");
     }];
     [deferred addAlways:^{
@@ -108,7 +108,7 @@
         NSLog(@"Done was called again again");
         XCTAssert([value isEqualToString:valueToResolveWith], @"Value should equal %@", valueToResolveWith);
     }];
-    [deferred addFail:^(NSError *error) {
+    [deferred addFail:^(id error) {
         NSLog(@"Fail was called");
     }];
     [deferred addAlways:^{

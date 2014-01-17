@@ -14,7 +14,7 @@
 
 @property (nonatomic, assign) PromiseState state;
 @property (nonatomic, assign) id value;
-@property (nonatomic, strong) NSError *error;
+@property (nonatomic, assign) id error;
 
 @property (nonatomic, strong) NSMutableArray *doneBlocks;
 @property (nonatomic, strong) NSMutableArray *failBlocks;
@@ -159,7 +159,7 @@
 /*
  * Rejects deferred if in pending sate and executes all fail and always blocks
  */
-- (Deferred *)rejectWith:(NSError*)error {
+- (Deferred *)rejectWith:(id)error {
     if (self.state != PromiseStatePending) return self;
     
     self.error = error;
@@ -218,11 +218,11 @@
     [_promise setValue:value];
 }
 
-- (NSError *)error {
+- (id)error {
     return _promise.error;
 }
 
-- (void)setError:(NSError *)error {
+- (void)setError:(id)error {
     [_promise setError:error];
 }
 
@@ -312,7 +312,7 @@
     
     // If haven't failed or won yet, add check to each promise
     for (Promise *promise in promises) {
-        [promise addFail:^(NSError *error) {
+        [promise addFail:^(id error) {
             [self doFail];
         }];
         [promise addAlways:^{
