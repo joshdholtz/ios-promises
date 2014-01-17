@@ -33,7 +33,7 @@ Deferred *deferred1 = [Deferred deferred];
 [deferred1 addDone:^(id value) {
     NSLog(@"WOOT - deferred1 is done - %@", value);
 }];
-[deferred1 resolve:@"Josh is awesome"];
+[deferred1 resolveWith:@"Josh is awesome"];
 
 ```
 
@@ -50,10 +50,11 @@ Promise *promise = deferred2.promise;
     NSLog(@"WOOT - deferred2 is done - %@", value);
 }];
 [promise addFail:^(NSError *error) {
+    // This fail block's parameter is of type 'id' but I know that it will be an NSError
     NSLog(@":( - deferred2 failed - %@", error.domain);
 }];
 
-[deferred2 reject:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
+[deferred2 rejectWith:[NSError errorWithDomain:@"Oops" code:0 userInfo:nil]];
 
 ```
 
@@ -71,8 +72,8 @@ Deferred *deferred2 = [Deferred deferred];
     NSLog(@"WHEN RESOLVING always called");
 }];
 
-[deferred1 resolve:@"Yay"];
-[deferred2 resolve:@"Woot"];
+[deferred1 resolveWith:@"Yay"];
+[deferred2 resolveWith:@"Woot"];
 
 ```
 
