@@ -8,6 +8,9 @@
 
 #import <XCTest/XCTest.h>
 
+#import "Deferred.h"
+#import "Promise.h"
+
 @interface PromisesTests : XCTestCase
 
 @end
@@ -26,9 +29,28 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void)testDeferredResolved
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    Deferred *deferred = [Deferred deferred];
+    XCTAssertEqual(deferred.state, DeferredStatePending, @"Deferred state is not equal to DeferredStatePending");
+    
+    [deferred resolve:nil];
+    XCTAssertEqual(deferred.state, DeferredStateResolved, @"Deferred state is not equal to DeferredStateResolved");
+    
+    [deferred reject:nil];
+    XCTAssertEqual(deferred.state, DeferredStateResolved, @"Deferred state is not equal to DeferredStateResolved");
+}
+
+- (void)testDeferredRejected
+{
+    Deferred *deferred = [Deferred deferred];
+    XCTAssertEqual(deferred.state, DeferredStatePending, @"Deferred state is not equal to DeferredStatePending");
+    
+    [deferred reject:nil];
+    XCTAssertEqual(deferred.state, DeferredStateRejected, @"Deferred state is not equal to DeferredStateRejected");
+    
+    [deferred resolve:nil];
+    XCTAssertEqual(deferred.state, DeferredStateRejected, @"Deferred state is not equal to DeferredStateRejected");
 }
 
 @end
