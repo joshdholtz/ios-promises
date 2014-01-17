@@ -33,6 +33,7 @@
 }
 
 - (Promise *)addDone:(doneBlock)doneBlock {
+    if (doneBlock == nil) return self;
     if (self.state == PromiseStatePending) {
         [_doneBlocks addObject:[doneBlock copy]];
     } else {
@@ -42,6 +43,7 @@
 }
 
 - (Promise *)addFail:(failBlock)failBlock {
+    if (failBlock == nil) return self;
     if (self.state == PromiseStatePending) {
         [_failBlocks addObject:[failBlock copy]];
     } else {
@@ -51,6 +53,7 @@
 }
 
 - (Promise *)addAlways:(alwaysBlock)alwaysBlock {
+    if (alwaysBlock == nil) return self;
     if (self.state == PromiseStatePending) {
         [_alwaysBlocks addObject:[alwaysBlock copy]];
     } else {
@@ -61,13 +64,13 @@
 
 - (Promise *)then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock {
     if (self.state == PromiseStatePending) {
-        [_doneBlocks addObject:[doneBlock copy]];
-        [_failBlocks addObject:[failBlock copy]];
-        [_alwaysBlocks addObject:[alwaysBlock copy]];
+        if (doneBlock != nil) [_doneBlocks addObject:[doneBlock copy]];
+        if (failBlock != nil) [_failBlocks addObject:[failBlock copy]];
+        if (alwaysBlock != nil) [_alwaysBlocks addObject:[alwaysBlock copy]];
     } else {
-        doneBlock(self.value);
-        failBlock(self.error);
-        alwaysBlock();
+        if (doneBlock != nil) doneBlock(self.value);
+        if (failBlock != nil)failBlock(self.error);
+        if (alwaysBlock != nil) alwaysBlock();
     }
     return self;
 }
