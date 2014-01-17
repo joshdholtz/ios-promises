@@ -29,7 +29,7 @@
     [super tearDown];
 }
 
-- (void)testDeferredResolved
+- (void)testDeferredStateResolved
 {
     Deferred *deferred = [Deferred deferred];
     XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
@@ -41,7 +41,7 @@
     XCTAssertEqual(deferred.state, PromiseStateResolved, @"Deferred state is not equal to PromiseStateResolved");
 }
 
-- (void)testDeferredRejected
+- (void)testDeferredStateRejected
 {
     Deferred *deferred = [Deferred deferred];
     XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
@@ -51,6 +51,27 @@
     
     [deferred resolve:nil];
     XCTAssertEqual(deferred.state, PromiseStateRejected, @"Deferred state is not equal to PromiseStateRejected");
+}
+
+- (void)testResolvingDeferredBlockBefore
+{
+    Deferred *deferred = [Deferred deferred];
+    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
+    
+    NSString *valueToResolveWith = @"Yay";
+    
+    [deferred addDone:^(id value) {
+        NSLog(@"Done was called");
+        XCTAssert([value isEqualToString:valueToResolveWith], @"Value should equal %@", valueToResolveWith);
+    }];
+    [deferred addFail:^(NSError *error) {
+        NSLog(@"Fail was called");
+    }];
+    [deferred addAlways:^{
+        NSLog(@"Always was called");
+    }];
+    
+    [deferred resolve:valueToResolveWith];
 }
 
 @end

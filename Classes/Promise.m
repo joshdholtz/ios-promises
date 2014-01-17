@@ -11,6 +11,8 @@
 @interface Promise()
 
 @property (nonatomic, assign) PromiseState state;
+@property (nonatomic, assign) id value;
+@property (nonatomic, strong) NSError *error;
 
 @property (nonatomic, strong) NSMutableArray *doneBlocks;
 @property (nonatomic, strong) NSMutableArray *failBlocks;
@@ -31,17 +33,29 @@
 }
 
 - (Promise *)addDone:(doneBlock)doneBlock {
-    [_doneBlocks addObject:[doneBlock copy]];
+    if (self.state == PromiseStatePending) {
+        [_doneBlocks addObject:[doneBlock copy]];
+    } else {
+        doneBlock(self.value);
+    }
     return self;
 }
 
 - (Promise *)addFail:(failBlock)failBlock {
-    [_failBlocks addObject:[failBlock copy]];
+    if (self.state == PromiseStatePending) {
+        [_failBlocks addObject:[failBlock copy]];
+    } else {
+        failBlock(self.error);
+    }
     return self;
 }
 
 - (Promise *)addAlways:(alwaysBlock)alwaysBlock {
-    [_alwaysBlocks addObject:[alwaysBlock copy]];
+    if (self.state == PromiseStatePending) {
+        [_alwaysBlocks addObject:[alwaysBlock copy]];
+    } else {
+        alwaysBlock();
+    }
     return self;
 }
 

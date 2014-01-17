@@ -10,7 +10,7 @@ typedef enum {
     PromiseStatePending, PromiseStateResolved, PromiseStateRejected
 } PromiseState;
 
-typedef void (^doneBlock)(id object);
+typedef void (^doneBlock)(id value);
 typedef void (^failBlock)(NSError *error);
 typedef void (^alwaysBlock)();
 
