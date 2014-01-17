@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Josh Holtz. All rights reserved.
 //
 
+typedef enum {
+    PromiseStatePending, PromiseStateResolved, PromiseStateRejected
+} PromiseState;
+
 typedef void (^doneBlock)(id object);
 typedef void (^failBlock)(NSError *error);
 typedef void (^alwaysBlock)();
@@ -14,6 +18,7 @@ typedef void (^alwaysBlock)();
 
 @interface Promise : NSObject
 
+- (PromiseState)state;
 - (Promise*)addDone:(doneBlock)doneBlock;
 - (Promise*)addFail:(failBlock)failBlock;
 - (Promise*)addAlways:(alwaysBlock)alwaysBlock;

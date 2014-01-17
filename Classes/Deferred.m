@@ -10,12 +10,16 @@
 
 @interface Deferred()
 
+@property (nonatomic, assign) PromiseState state;
+
 @property (nonatomic, assign) id value;
 @property (nonatomic, strong) NSError *error;
 
 @end
 
 @implementation Deferred
+
+@dynamic state;
 
 + (Deferred *)deferred {
     return [[Deferred alloc] init];
@@ -24,28 +28,25 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.state = DeferredStatePending;
+
     }
     return self;
 }
 
 - (Deferred *)reject:(NSError*)error {
+    if (self.state != PromiseStatePending) return self;
+    
     _error = error;
-    [self setState:DeferredStateRejected];
+    [self setState:PromiseStateRejected];
     return self;
 }
 
 - (Deferred *)resolve:(id)value {
+    if (self.state != PromiseStatePending) return self;
+    
     _value = value;
-    [self setState:DeferredStateResolved];
+    [self setState:PromiseStateResolved];
     return self;
-}
-
-- (void)setState:(DeferredState)state {
-    // Only set state if its pending
-    if (_state == DeferredStatePending) {
-        _state = state;
-    }
 }
 
 - (Promise *)promise {

@@ -32,25 +32,25 @@
 - (void)testDeferredResolved
 {
     Deferred *deferred = [Deferred deferred];
-    XCTAssertEqual(deferred.state, DeferredStatePending, @"Deferred state is not equal to DeferredStatePending");
+    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
     
     [deferred resolve:nil];
-    XCTAssertEqual(deferred.state, DeferredStateResolved, @"Deferred state is not equal to DeferredStateResolved");
+    XCTAssertEqual(deferred.state, PromiseStateResolved, @"Deferred state is not equal to PromiseStateResolved");
     
     [deferred reject:nil];
-    XCTAssertEqual(deferred.state, DeferredStateResolved, @"Deferred state is not equal to DeferredStateResolved");
+    XCTAssertEqual(deferred.state, PromiseStateResolved, @"Deferred state is not equal to PromiseStateResolved");
 }
 
 - (void)testDeferredRejected
 {
     Deferred *deferred = [Deferred deferred];
-    XCTAssertEqual(deferred.state, DeferredStatePending, @"Deferred state is not equal to DeferredStatePending");
+    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
     
     [deferred reject:nil];
-    XCTAssertEqual(deferred.state, DeferredStateRejected, @"Deferred state is not equal to DeferredStateRejected");
+    XCTAssertEqual(deferred.state, PromiseStateRejected, @"Deferred state is not equal to PromiseStateRejected");
     
     [deferred resolve:nil];
-    XCTAssertEqual(deferred.state, DeferredStateRejected, @"Deferred state is not equal to DeferredStateRejected");
+    XCTAssertEqual(deferred.state, PromiseStateRejected, @"Deferred state is not equal to PromiseStateRejected");
 }
 
 @end

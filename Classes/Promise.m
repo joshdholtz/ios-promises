@@ -10,6 +10,8 @@
 
 @interface Promise()
 
+@property (nonatomic, assign) PromiseState state;
+
 @property (nonatomic, strong) NSMutableArray *doneBlocks;
 @property (nonatomic, strong) NSMutableArray *failBlocks;
 @property (nonatomic, strong) NSMutableArray *alwaysBlocks;
