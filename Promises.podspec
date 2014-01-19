@@ -1,9 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "Promises"
-  s.version      = "0.0.1"
+  s.version      = "0.1.0"
   s.summary      = "Objective-C implementation of jQuery-ish promises for iOS"
   s.description  = <<-DESC
-                    I promise it does something
+                    I promise it does something.
+
+                    Asynchronous code... blah blah blah... standard interface for... blah blah blah... handling asynchronous actions... blah blah blah... chaining callbacks.
                    DESC
   s.homepage     = "https://github.com/joshdholtz/ios-promises"
   s.license      = 'MIT'
