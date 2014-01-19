@@ -1,5 +1,7 @@
 # iOS-Promises
 
+Objective-C implementation of jQuery-ish promises.
+
 Asynchronous code... blah blah blah... standard interface for... blah blah blah... handling asynchronous actions... blah blah blah... chaining callbacks.
 
 ### Features
