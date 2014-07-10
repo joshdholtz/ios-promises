@@ -1,8 +1,17 @@
 # iOS-Promises
 
+![](https://cocoapod-badges.herokuapp.com/v/Promises/badge.png)
+
 Objective-C implementation of jQuery-ish promises.
 
 Asynchronous code... blah blah blah... standard interface for... blah blah blah... handling asynchronous actions... blah blah blah... chaining callbacks.
+
+### Updates
+
+Version | Changes
+--- | ---
+**0.1.1** | Fixed issue with EXC_BAD_ACCESS (thanks [DanielMSchmidt](https://github.com/DanielMSchmidt))
+**0.1.0** | Initial release
 
 ### Features
 - `Deferred` objects (the controller for the promise) are used change state for promise behavior which triggers callbacks
@@ -24,7 +33,7 @@ Clone the repository and drop in the .h and .m files from the "Classes" director
 Promises is available through [CocoaPods](http://cocoapods.org), to install
 it simply add the following line to your Podfile:
 
-    pod 'Promises', '~> 0.1.0'
+    pod 'Promises', '~> 0.1.1'
 
 ## Examples
 
