@@ -13,8 +13,8 @@
 @interface Promise()
 
 @property (nonatomic, assign) PromiseState state;
-@property (nonatomic, assign) id value;
-@property (nonatomic, assign) id error;
+@property (nonatomic, strong) id value;
+@property (nonatomic, strong) id error;
 
 @property (nonatomic, strong) NSMutableArray *doneBlocks;
 @property (nonatomic, strong) NSMutableArray *failBlocks;
