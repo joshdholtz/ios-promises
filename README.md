@@ -10,6 +10,7 @@ Asynchronous code... blah blah blah... standard interface for... blah blah blah.
 
 Version | Changes
 --- | ---
+**0.1.2** | `then` and `fail` blocks can be undefined now when using `When` (thanks [brennanmke](https://github.com/brennanmke))
 **0.1.1** | Fixed issue with EXC_BAD_ACCESS (thanks [DanielMSchmidt](https://github.com/DanielMSchmidt))
 **0.1.0** | Initial release
 
