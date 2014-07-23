@@ -284,7 +284,7 @@
     // Sets then blocks (wraps the when block in the done block)
     when.when = whenBlock;
     [when then:^(id value) {
-        when.when();
+        if (when.when != nil) when.when();
     } fail:failBlock always:alwaysBlock];
     
     // Sets promises
