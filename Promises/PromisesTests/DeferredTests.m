@@ -10,23 +10,11 @@
 
 #import "Promise.h"
 
-@interface PromisesTests : XCTestCase
+@interface DeferredTests : XCTestCase
 
 @end
 
-@implementation PromisesTests
-
-- (void)setUp
-{
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown
-{
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
+@implementation DeferredTests
 
 - (void)testDeferredStateResolved
 {
@@ -227,29 +215,6 @@
         NSLog(@"Fail was called");
     } always:^{
         NSLog(@"Always was called");
-    }];
-}
-
-
-- (void)testWhenNotDefined
-{
-    Deferred *deferred = [Deferred deferred];
-    XCTAssertEqual(deferred.state, PromiseStatePending, @"Deferred state is not equal to PromiseStatePending");
-    
-    NSString *valueToResolveWith = @"Anything";
-    [deferred resolveWith:valueToResolveWith];
-    
-    [deferred then:^(id value) {
-        NSLog(@"Done was called");
-    } fail:^(NSError *error) {
-        NSLog(@"Fail was called");
-    } always:^{
-        NSLog(@"Always was called");
-    }];
-    
-    [When when:@[deferred] then:nil fail:nil always:^{
-        NSLog(@"Always was called with When");
-        XCTAssertTrue(@"Should not crash when the 'then' and 'fail' blocks are not defined");
     }];
 }
 

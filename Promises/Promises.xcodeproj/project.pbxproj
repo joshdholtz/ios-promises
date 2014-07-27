@@ -20,10 +20,12 @@
 		039B70531888EE4300C590F8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 039B70321888EE4200C590F8 /* Foundation.framework */; };
 		039B70541888EE4300C590F8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 039B70361888EE4200C590F8 /* UIKit.framework */; };
 		039B705C1888EE4300C590F8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 039B705A1888EE4300C590F8 /* InfoPlist.strings */; };
-		039B705E1888EE4300C590F8 /* PromisesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 039B705D1888EE4300C590F8 /* PromisesTests.m */; };
+		039B705E1888EE4300C590F8 /* DeferredTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 039B705D1888EE4300C590F8 /* DeferredTests.m */; };
 		039B706A1888EEA900C590F8 /* Promises.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 039B70681888EEA900C590F8 /* Promises.podspec */; };
 		039B706B1888EEA900C590F8 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 039B70691888EEA900C590F8 /* README.md */; };
 		039B70711888F0D600C590F8 /* Promise.m in Sources */ = {isa = PBXBuildFile; fileRef = 039B70701888F0D600C590F8 /* Promise.m */; };
+		46FDA9B01984CF6C004D469C /* PromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FDA9AF1984CF6C004D469C /* PromiseTests.m */; };
+		46FDA9B21984D15A004D469C /* WhenTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FDA9B11984D15A004D469C /* WhenTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,11 +57,13 @@
 		039B70511888EE4300C590F8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		039B70591888EE4300C590F8 /* PromisesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PromisesTests-Info.plist"; sourceTree = "<group>"; };
 		039B705B1888EE4300C590F8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		039B705D1888EE4300C590F8 /* PromisesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PromisesTests.m; sourceTree = "<group>"; };
+		039B705D1888EE4300C590F8 /* DeferredTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeferredTests.m; sourceTree = "<group>"; };
 		039B70681888EEA900C590F8 /* Promises.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Promises.podspec; path = ../Promises.podspec; sourceTree = "<group>"; };
 		039B70691888EEA900C590F8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		039B706F1888F0D600C590F8 /* Promise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Promise.h; sourceTree = "<group>"; };
 		039B70701888F0D600C590F8 /* Promise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Promise.m; sourceTree = "<group>"; };
+		46FDA9AF1984CF6C004D469C /* PromiseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PromiseTests.m; sourceTree = "<group>"; };
+		46FDA9B11984D15A004D469C /* WhenTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WhenTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +151,9 @@
 		039B70571888EE4300C590F8 /* PromisesTests */ = {
 			isa = PBXGroup;
 			children = (
-				039B705D1888EE4300C590F8 /* PromisesTests.m */,
+				039B705D1888EE4300C590F8 /* DeferredTests.m */,
+				46FDA9AF1984CF6C004D469C /* PromiseTests.m */,
+				46FDA9B11984D15A004D469C /* WhenTests.m */,
 				039B70581888EE4300C590F8 /* Supporting Files */,
 			);
 			path = PromisesTests;
@@ -282,7 +288,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				039B705E1888EE4300C590F8 /* PromisesTests.m in Sources */,
+				039B705E1888EE4300C590F8 /* DeferredTests.m in Sources */,
+				46FDA9B01984CF6C004D469C /* PromiseTests.m in Sources */,
+				46FDA9B21984D15A004D469C /* WhenTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +491,7 @@
 				039B70631888EE4300C590F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		039B70641888EE4300C590F8 /* Build configuration list for PBXNativeTarget "PromisesTests" */ = {
 			isa = XCConfigurationList;
@@ -491,6 +500,7 @@
 				039B70661888EE4300C590F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
