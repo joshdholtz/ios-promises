@@ -39,13 +39,26 @@
  * If already resolved, block gets executed
  */
 - (Promise *)addDone:(doneBlock)doneBlock {
-    if (doneBlock == nil) return self;
-    if (self.state == PromiseStatePending) {
-        [_doneBlocks addObject:[doneBlock copy]];
-    } else if (self.state == PromiseStateResolved) {
-        doneBlock(self.value);
+    if (doneBlock != nil) {
+        if (self.state == PromiseStatePending) {
+            [_doneBlocks addObject:[doneBlock copy]];
+        }
+        else if (self.state == PromiseStateResolved) {
+            doneBlock(self.value);
+        }
     }
+
     return self;
+}
+
+- (Promise *)addDoneSelector:(SEL)selector onObject:(id)object {
+    return [self addDone:^(id value) {
+        // Calling [object performSelector:selector withObject:value] can cause
+        // a leak, so instead we get, and call, the underlying implementation
+        IMP imp = [object methodForSelector:selector];
+        void (* func)(id, SEL, id) = (void *)imp;
+        func(object, selector, value);
+    }];
 }
 
 /*
@@ -53,13 +66,26 @@
  * If already rejected, block gets executed
  */
 - (Promise *)addFail:(failBlock)failBlock {
-    if (failBlock == nil) return self;
-    if (self.state == PromiseStatePending) {
-        [_failBlocks addObject:[failBlock copy]];
-    } else if (self.state == PromiseStateRejected) {
-        failBlock(self.error);
+    if (failBlock != nil) {
+        if (self.state == PromiseStatePending) {
+            [_failBlocks addObject:[failBlock copy]];
+        }
+        else if (self.state == PromiseStateRejected) {
+            failBlock(self.error);
+        }
     }
+
     return self;
+}
+
+- (Promise *)addFailSelector:(SEL)selector onObject:(id)object {
+    return [self addFail:^(id error) {
+        // Calling [object performSelector:selector withObject:value] can cause
+        // a leak, so instead we get, and call, the underlying implementation
+        IMP imp = [object methodForSelector:selector];
+        void (* func)(id, SEL, id) = (void *)imp;
+        func(object, selector, error);
+    }];
 }
 
 /*
@@ -67,13 +93,26 @@
  * If no longer pending, block gets executed
  */
 - (Promise *)addAlways:(alwaysBlock)alwaysBlock {
-    if (alwaysBlock == nil) return self;
-    if (self.state == PromiseStatePending) {
-        [_alwaysBlocks addObject:[alwaysBlock copy]];
-    } else {
-        alwaysBlock();
+    if (alwaysBlock != nil) {
+        if (self.state == PromiseStatePending) {
+            [_alwaysBlocks addObject:[alwaysBlock copy]];
+        }
+        else {
+            alwaysBlock();
+        }
     }
+
     return self;
+}
+
+- (Promise *)addAlwaysSelector:(SEL)selector onObject:(id)object {
+    return [self addAlways:^{
+        // Calling [object performSelector:selector withObject:value] can cause
+        // a leak, so instead we get, and call, the underlying implementation
+        IMP imp = [object methodForSelector:selector];
+        void (* func)(id, SEL) = (void *)imp;
+        func(object, selector);
+    }];
 }
 
 /*

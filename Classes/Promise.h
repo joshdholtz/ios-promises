@@ -22,8 +22,14 @@ typedef void (^whenBlock)();
 
 - (PromiseState)state;
 - (Promise*)addDone:(doneBlock)doneBlock;
+- (Promise*)addDoneSelector:(SEL)selector onObject:(id)object;
+
 - (Promise*)addFail:(failBlock)failBlock;
+- (Promise*)addFailSelector:(SEL)selector onObject:(id)object;
+
 - (Promise*)addAlways:(alwaysBlock)alwaysBlock;
+- (Promise*)addAlwaysSelector:(SEL)selector onObject:(id)object;
+
 - (Promise*)then:(doneBlock)doneBlock fail:(failBlock)failBlock always:(alwaysBlock)alwaysBlock;
 
 @end
