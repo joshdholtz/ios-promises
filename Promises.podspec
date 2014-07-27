@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Promises"
-  s.version      = "0.1.2"
+  s.version      = "0.2.0"
   s.summary      = "Objective-C implementation of jQuery-ish promises for iOS"
   s.description  = <<-DESC
                     I promise it does something.

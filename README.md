@@ -10,6 +10,7 @@ Asynchronous code... blah blah blah... standard interface for... blah blah blah.
 
 Version | Changes
 --- | ---
+**0.2.0** | Added ability to have Promises `then`, `fail`, or `always` via a selector on an object instead of within a block
 **0.1.2** | `then` and `fail` blocks can be undefined now when using `When` (thanks [brennanmke](https://github.com/brennanmke))
 **0.1.1** | Fixed issue with EXC_BAD_ACCESS (thanks [DanielMSchmidt](https://github.com/DanielMSchmidt))
 **0.1.0** | Initial release
